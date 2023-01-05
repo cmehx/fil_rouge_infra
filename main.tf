@@ -1,12 +1,14 @@
 resource "azurerm_resource_group" "resourcegroups" {
-    name        = "${var.ResourceGroup}_${var.environment}"
+    for_each    = toset(var.environments)
+    name        = "${var.ResourceGroup}_${each.key}"
     location    = var.Location
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${var.ContainerRegistryName}${title(var.environment)}"
-  resource_group_name = "${var.ResourceGroup}_${var.environment}"
-  location            = var.Location
-  sku                 = var.ContainerRegistrySKU
-  admin_enabled       = false
+    for_each            = toset(var.environments)
+    name                = "${var.ContainerRegistryName}${title(each.key)}"
+    resource_group_name = "${var.ResourceGroup}_${var.environment}"
+    location            = var.Location
+    sku                 = var.ContainerRegistrySKU
+    admin_enabled       = false
 }
