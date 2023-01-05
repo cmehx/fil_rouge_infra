@@ -10,17 +10,17 @@ variable "environments" {
 
 variable "Location" {
     type        = string
-    default     = "EastUs"  
+    default     = "EastUs"
 }
 
 variable "ResourceGroup" {
     type        = string
-    default     = "fil_rouge_grp_dev"   
+    default     = "fil_rouge_grp" + "_" + var.env
 }
 
 variable "ContainerRegistryName" {
     type        = string
-    default     = "filRougeRegistryDev"
+    default     = "filRougeRegistry" + "_" + var.env
 }
 
 variable "ContainerRegistrySKU" {
