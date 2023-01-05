@@ -1,3 +1,4 @@
+variable "environment" {}
 variable "environments" {
   description = "Env to deploy"
   type        = list(string)
