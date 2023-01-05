@@ -19,9 +19,9 @@ resource "azurerm_resource_group" "resourcegroups" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "filRougeRegistry"
+  name                = var.ContainerRegistryName
   resource_group_name = var.ResourceGroup
   location            = var.Location
-  sku                 = "Standard"
+  sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
 }
