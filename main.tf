@@ -22,6 +22,6 @@ resource "azurerm_container_registry" "acr" {
   name                = "filRougeRegistry"
   resource_group_name = var.ResourceGroup
   location            = var.Location
-  sku                 = "Premium"
+  sku                 = "Standard"
   admin_enabled       = false
 }
