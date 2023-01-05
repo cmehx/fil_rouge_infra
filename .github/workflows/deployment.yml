@@ -35,6 +35,12 @@ jobs:
         id: init
         run: |
           terraform init
+
+      - name: 'Terraform import'
+        id: import
+        run: |
+          ./imports.sh
+
       - name: 'Terraform plan'
         id: plan
         run: |
@@ -48,4 +54,8 @@ jobs:
       - name: 'Terraform apply'
         id: apply
         run: |
-          terraform apply -auto-approve  
+                    
+      - name: 'Terraform destroy'
+        id: destroy
+        run: |
+          terraform destroy 
