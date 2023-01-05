@@ -15,12 +15,12 @@ variable "Location" {
 
 variable "ResourceGroup" {
     type        = string
-    default     = "fil_rouge_grp" + "_" + var.env
+    default     = "fil_rouge_grp_${var.env}"
 }
 
 variable "ContainerRegistryName" {
     type        = string
-    default     = "filRougeRegistry" + "_" + var.env
+    default     = "filRougeRegistry_${var.env}"
 }
 
 variable "ContainerRegistrySKU" {
