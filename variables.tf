@@ -21,7 +21,7 @@ variable "ResourceGroup" {
 
 variable "ContainerRegistryName" {
     type        = string
-    default     = "filRougeRegistry"
+    default     = "FilRougeRegistry"
 }
 
 variable "ContainerRegistrySKU" {
