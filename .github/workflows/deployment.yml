@@ -40,10 +40,10 @@ jobs:
         run: |
           terraform plan
 
-      - name: 'Terraform import'
-        id: import
+      - name: 'Terraform validate'
+        id: validate
         run: |
-          terraform import
+          terraform validate -no-color
                     
       - name: 'Terraform apply'
         id: apply
