@@ -17,3 +17,11 @@ resource "azurerm_resource_group" "resourcegroups" {
     name        = var.ResourceGroup
     location    = var.Location
 }
+
+resource "azurerm_container_registry" "acr" {
+  name                = "fil_rouge_registry"
+  resource_group_name = var.ResourceGroup
+  location            = var.Location
+  sku                 = "Premium"
+  admin_enabled       = false
+}
