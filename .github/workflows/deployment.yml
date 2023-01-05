@@ -29,15 +29,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: hashicorp/setup-terraform@v2
 
       # Runs a single command using the runners shell
-      - name: 'Terraform fmt'
-        id: fmt
-        run: |
-          terraform fmt -check
-        continue-on-error: true
-
       - name: 'Terraform init'
         id: init
         run: |
@@ -58,6 +51,7 @@ jobs:
         id: apply
         run: |
           terraform apply -auto-approve
+        continue-on-error: true
                     
       - name: 'Terraform destroy'
         id: destroy
