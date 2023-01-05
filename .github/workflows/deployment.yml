@@ -31,25 +31,27 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
+      - name: 'Terraform fmt'
+        id: fmt
+        run: |
+          terraform fmt -check
+        continue-on-error: true
+
       - name: 'Terraform init'
         id: init
         run: |
           terraform init
 
-      - name: 'Terraform import'
-        id: import
+      - name: 'Terraform validate'
+        id: validate
         run: |
-          ./imports.sh
+          terraform validate -no-color
 
       - name: 'Terraform plan'
         id: plan
         run: |
           terraform plan
-
-      - name: 'Terraform validate'
-        id: validate
-        run: |
-          terraform validate -no-color
+        continue-on-error: true
                     
       - name: 'Terraform apply'
         id: apply
