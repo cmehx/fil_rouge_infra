@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "resourcegroups" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "fil_rouge_registry"
+  name                = "filRougeRegistry"
   resource_group_name = var.ResourceGroup
   location            = var.Location
   sku                 = "Premium"
