@@ -34,12 +34,16 @@ jobs:
       - name: 'Terraform init'
         id: init
         run: |
-          terraform init          
-
+          terraform init
       - name: 'Terraform plan'
         id: plan
         run: |
           terraform plan
+
+      - name: 'Terraform import'
+        id: import
+        run: |
+          terraform import
                     
       - name: 'Terraform apply'
         id: apply
