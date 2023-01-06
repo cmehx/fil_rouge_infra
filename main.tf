@@ -25,7 +25,7 @@ resource "azurerm_key_vault" "key_vault" {
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
-  sku_name                    = "${var.KeyVaultSKU}"
+  sku_name                    = var.KeyVaultSKU
   access_policy {
     key_permissions = [
       "Get",
