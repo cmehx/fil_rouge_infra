@@ -1,6 +1,12 @@
 name: terraform-lint
 
-on: [push, pull_request]
+on:
+  # Triggers the workflow on push or pull request events but only for the "develop" branch
+  push:
+    branches: [ "*" ]
+  pull_request:
+    types:
+      - opened
 
 jobs:
   #linter
@@ -17,6 +23,7 @@ jobs:
   slackNotification:
     name: Slack Notification
     runs-on: ubuntu-latest
+    needs: linter
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification

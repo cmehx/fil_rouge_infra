@@ -6,16 +6,17 @@ name: fil_rouge_deployment_test
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    types:
+      - opened
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
-  resourcegroups:
+  deployment:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -61,8 +62,13 @@ jobs:
           terraform destroy -auto-approve
           
   slackNotification:
+
     name: Slack Notification
+
     runs-on: ubuntu-latest
+
+    needs: deployment
+
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification
