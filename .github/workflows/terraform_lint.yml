@@ -36,4 +36,4 @@ jobs:
         SLACK_MESSAGE: 'Terraform linter'
         SLACK_TITLE: 'workflow'
         SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ jobs.linter.status }}
+        SLACK_COLOR: ${{ job.linter.status }}
