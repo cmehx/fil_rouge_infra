@@ -25,8 +25,8 @@ jobs:
         status: ${{ job.status }}
         notify_when: 'failure'
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_APP }}
-        SLACK_MESSAGE: 'Vérification des standards Python avec Pylint' 
-        SLACK_TITLE: 'Pylint'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
+        SLACK_MESSAGE: 'Terraform linter'
+        SLACK_TITLE: 'workflow'
         SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ job.status }}
+        SLACK_COLOR: ${{ job.linter.status }}
