@@ -3,7 +3,8 @@ name: terraform-lint
 on: [push, pull_request]
 
 jobs:
-  delivery:
+  #linter
+  linter:
 
     runs-on: ubuntu-latest
 
