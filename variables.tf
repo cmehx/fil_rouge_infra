@@ -8,21 +8,21 @@ variable "environments" {
 }
 
 variable "Location" {
-    type        = string
-    default     = "EastUs"
+  type    = string
+  default = "EastUs"
 }
 
 variable "ResourceGroup" {
-    type        = string
-    default     = "fil_rouge_grp"
+  type    = string
+  default = "fil_rouge_grp"
 }
 
 variable "ContainerRegistryName" {
-    type        = string
-    default     = "FilRougeRegistry"
+  type    = string
+  default = "FilRougeRegistry"
 }
 
 variable "ContainerRegistrySKU" {
-    type        = string
-    default     = "Standard"
+  type    = string
+  default = "Standard"
 }
