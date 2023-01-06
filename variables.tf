@@ -24,7 +24,7 @@ variable "ContainerRegistryName" {
 
 variable "ContainerRegistrySKU" {
   type    = string
-  default = "Standard"
+  default = "standard"
 }
 
 variable "KeyVaultName" {
@@ -34,5 +34,5 @@ variable "KeyVaultName" {
 
 variable "KeyVaultSKU" {
   type    = string
-  default = "Standard"
+  default = "standard"
 }
