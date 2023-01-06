@@ -16,19 +16,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Check out code
-      uses: actions/checkout@main
     - name: Lint Terraform
       uses: actionshub/terraform-lint@main
     - name: Slack Notification
-      if: ${{ always() }}
+      if: always()
       uses: rtCamp/action-slack-notify@v2
       with:
         status: ${{ job.status }}
         notify_when: 'failure'
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
-        SLACK_MESSAGE: 'Terraform linter'
-        SLACK_TITLE: 'workflow'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_APP }}
+        SLACK_MESSAGE: 'Vérification des standards Python avec Pylint' 
+        SLACK_TITLE: 'Pylint'
         SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ job.linter.status }}
+        SLACK_COLOR: ${{ job.status }}
