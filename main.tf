@@ -11,7 +11,9 @@ resource "azurerm_container_registry" "acr" {
   location            = var.Location
   sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
-  depends_on          = ["azurerm_resource_group.${var.ResourceGroup}_${each.key}"]
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
 }
 
 resource "azurerm_key_vault" "keyvault" {
