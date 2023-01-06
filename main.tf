@@ -17,3 +17,24 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 }
 
+resource "azurerm_key_vault" "key_vault" {
+  for_each                    = toset(var.environments)
+  name                        = "${var.KeyVaultName}_${each.key}"
+  location                    = var.Location
+  resource_group_name         = "${var.ResourceGroup}_${each.key}"
+  enabled_for_disk_encryption = true
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = false
+  sku_name                    = "${var.KeyVaultSKU}"
+  access_policy {
+    key_permissions = [
+      "Get",
+    ]
+    secret_permissions = [
+      "Get",
+    ]
+    storage_permissions = [
+      "Get",
+    ]
+  }
+}

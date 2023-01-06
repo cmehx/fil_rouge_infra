@@ -26,3 +26,13 @@ variable "ContainerRegistrySKU" {
   type    = string
   default = "Standard"
 }
+
+variable "KeyVaultName" {
+  type    = string
+  default = "fil_rouge_key"
+}
+
+variable "KeyVaultSKU" {
+  type    = string
+  default = "Standard"
+}
