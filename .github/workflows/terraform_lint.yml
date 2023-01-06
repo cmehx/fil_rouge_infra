@@ -19,14 +19,6 @@ jobs:
       uses: actions/checkout@main
     - name: Lint Terraform
       uses: actionshub/terraform-lint@main
-  
-  slackNotification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: linter
-    steps:
-    - uses: actions/checkout@v2
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
@@ -34,4 +26,4 @@ jobs:
         SLACK_MESSAGE: 'Terraform linter'
         SLACK_TITLE: 'workflow'
         SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ job.linter.status }}
+        SLACK_COLOR: ${{ job.status }}
