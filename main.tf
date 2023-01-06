@@ -19,7 +19,7 @@ resource "azurerm_container_registry" "acr" {
 
 resource "azurerm_key_vault" "key_vault" {
   for_each                    = toset(var.environments)
-  name                        = "${var.KeyVaultName}-${each.key}"
+  name                        = "${var.KeyVaultName}${title(each.key)}"
   location                    = var.Location
   resource_group_name         = "${var.ResourceGroup}_${each.key}"
   tenant_id                   = data.azurerm_client_config.current.tenant_id

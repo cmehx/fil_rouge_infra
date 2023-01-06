@@ -29,7 +29,7 @@ variable "ContainerRegistrySKU" {
 
 variable "KeyVaultName" {
   type    = string
-  default = "fil-rouge-key"
+  default = "FilRougeKey"
 }
 
 variable "KeyVaultSKU" {
