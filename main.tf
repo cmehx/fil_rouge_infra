@@ -13,7 +13,7 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 }
 
-resource "azurerm_key_vault" "key_vault" {
+resource "azurerm_key_vault" "keyvault" {
   for_each                    = toset(var.environments)
   name                        = "${var.KeyVaultName}${title(each.key)}"
   location                    = var.Location
