@@ -27,6 +27,6 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
         SLACK_MESSAGE: 'Terraform linter'
-        SLACK_TITLE: 'workflow'
+        SLACK_TITLE: 'TerraLint'
         SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ job.linter.status }}
+        SLACK_COLOR: ${{ job.status }}
