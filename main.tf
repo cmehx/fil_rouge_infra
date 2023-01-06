@@ -2,10 +2,6 @@ resource "azurerm_resource_group" "resourcegroups" {
   for_each = toset(var.environments)
   name     = "${var.ResourceGroup}_${each.key}"
   location = var.Location
-  tags = {
-    Environment = "Terraform Getting Started"
-    Team        = "DevOps"
-  }
 }
 
 resource "azurerm_container_registry" "acr" {
