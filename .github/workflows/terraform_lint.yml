@@ -19,6 +19,8 @@ jobs:
       uses: actions/checkout@main
     - name: Lint Terraform
       uses: actionshub/terraform-lint@main
+    - name: pre-commit
+      uses: pre-commit/action@v3.0.0
   
   slackNotification:
     name: Slack Notification
