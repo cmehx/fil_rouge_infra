@@ -9,7 +9,6 @@ resource "azurerm_resource_group" "resourcegroups" {
 }
 
 resource "azurerm_container_registry" "acr" {
-    
   for_each            = toset(var.environments)
   name                = "${var.ContainerRegistryName}${title(each.key)}"
   resource_group_name = "${var.ResourceGroup}_${each.key}"
