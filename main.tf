@@ -43,3 +43,28 @@ resource "azurerm_key_vault" "keyvault" {
     azurerm_resource_group.resourcegroups
   ]
 }
+
+resource "azurerm_kubernetes_cluster" "cluster" {
+  for_each            = toset(var.environments)
+  name                = "${var.ClusterName}_${each.key}"
+  location            = var.Location
+  resource_group_name = "${var.ResourceGroup}_${each.key}"
+  dns_prefix          = "${var.ClusterName}_${each.key}"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 2
+    vm_size    = "Standard_D2_v2"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    Environment = each.key
+  }
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
+}

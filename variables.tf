@@ -36,3 +36,8 @@ variable "KeyVaultSKU" {
   type    = string
   default = "standard"
 }
+
+variable "ClusterName" {
+  type    = string
+  default = "fil_rouge_cluster"
+}
