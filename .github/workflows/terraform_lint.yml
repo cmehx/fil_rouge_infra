@@ -23,6 +23,7 @@ jobs:
   slackNotification:
     name: Slack Notification
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: linter
     steps:
     - uses: actions/checkout@v2
