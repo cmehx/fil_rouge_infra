@@ -1,11 +1,14 @@
+ressource "random_string" "random_env" {
+    length = 3
+    numeric = false
+    special = false
+    upper = false
+}
+
 variable "environments" {
   description = "Env to deploy"
   type        = list(string)
-  default = [
-    "dev",
-    "uat",
-    "prod"
-  ]
+  default = [random_string.random_env.result]
 }
 
 variable "Location" {
