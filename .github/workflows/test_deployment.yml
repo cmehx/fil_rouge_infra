@@ -6,16 +6,17 @@ name: fil_rouge_deployment_test
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    types:
+      - opened
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
-  resourcegroups:
+  deployment:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -47,7 +48,6 @@ jobs:
         id: plan
         run: |
           terraform plan
-        continue-on-error: true
                     
       - name: 'Terraform apply'
         id: apply
@@ -59,17 +59,16 @@ jobs:
         id: destroy
         run: |
           terraform destroy -auto-approve
-          
-  slackNotification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
-        SLACK_MESSAGE: 'Test déploiement infra'
-        SLACK_TITLE: 'workflow'
-        SLACK_USERNAME: 'Github_Action'
-        SLACK_COLOR: ${{ job.status }}
+
+      - name: Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          status: ${{ job.status }}
+          notify_when: 'failure'
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
+          SLACK_MESSAGE: 'Test deployment'
+          SLACK_TITLE: 'Test Deployment'
+          SLACK_USERNAME: 'Github_Action'
+          SLACK_COLOR: ${{ job.status }}
