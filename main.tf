@@ -37,5 +37,7 @@ resource "azurerm_key_vault" "keyvault" {
       "Get",
     ]
   }
-  depends_on = ["azurerm_resource_group.${var.ResourceGroup}_${each.key}"]
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
 }
