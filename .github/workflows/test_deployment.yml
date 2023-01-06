@@ -59,7 +59,8 @@ jobs:
         id: destroy
         run: |
           terraform destroy -auto-approve
-    slackNotification:
+          
+  slackNotification:
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +69,7 @@ jobs:
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
-        SLACK_MESSAGE: 'déploiement de l'environnement de développement'
+        SLACK_MESSAGE: 'Test déploiement infra'
         SLACK_TITLE: 'workflow'
         SLACK_USERNAME: 'Github_Action'
         SLACK_COLOR: ${{ job.status }}
