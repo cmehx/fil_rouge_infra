@@ -1,3 +1,4 @@
+data "azurerm_client_config" "current" {}
 resource "azurerm_resource_group" "resourcegroups" {
   name     = "${var.ResourceGroup}_${var.environment}"
   location = var.Location
