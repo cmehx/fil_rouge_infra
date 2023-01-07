@@ -1,3 +1,24 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm",
+      version = "~> 3.0"
+    }
+  }
+
+  required_version = ">= 0.14.9"
+}
+
+provider "azurerm" {
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy    = true
+      recover_soft_deleted_key_vaults = true
+    }
+  }
+}
+
+data "azurerm_client_config" "current" {}
 resource "azurerm_resource_group" "resourcegroups" {
   name     = "${var.ResourceGroup}_${var.environment}"
   location = var.Location
@@ -18,7 +39,6 @@ resource "azurerm_container_registry" "acrs" {
     azurerm_resource_group.resourcegroups
   ]
 }
-
 resource "azurerm_key_vault" "keyvaults" {
   name                        = "${var.KeyVaultName}${title(var.environment)}"
   location                    = azurerm_resource_group.resourcegroups.location
@@ -58,7 +78,6 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   default_node_pool {
     name                = "default"
     vm_size             = "Standard_D2_v2"
-    type                = "VirtualMachineScaleSets"
     os_disk_size_gb     = 30
     enable_auto_scaling = true
     min_count           = 1
