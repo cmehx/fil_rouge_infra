@@ -41,7 +41,7 @@ jobs:
       - name: 'Terraform init'
         id: init
         run: |
-          terraform init -reconfigure -backend-config=./terraform_test.tf
+          terraform init -reconfigure -backend-config=./backend_test.tf
 
       - name: 'Terraform validate'
         id: validate
