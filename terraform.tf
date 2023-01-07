@@ -8,7 +8,13 @@ terraform {
 
   required_version = ">= 0.14.9"
 
-  backend "azurerm" {}
+  backend "azurerm" {
+    for_each             = var.environments
+    resource_group_name  = "StorageAccount-ResourceGroup"
+    storage_account_name = "storage_account_${var.environment}"
+    container_name       = "tfstate"
+    key                  = "${var.environment}.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
