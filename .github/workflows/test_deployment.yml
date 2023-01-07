@@ -36,17 +36,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: 'Terraform import'
-        id: import
-        run: |
-          ./terraform_import.sh
-        shell: bash
-
       # Runs a single command using the runners shell
       - name: 'Terraform init'
         id: init
         run: |
           terraform init -reconfigure
+
+      - name: 'Terraform import'
+        id: import
+        run: |
+          ./terraform_import.sh
+        shell: bash
 
       - name: 'Terraform validate'
         id: validate
