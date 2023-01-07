@@ -27,6 +27,8 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       TF_VAR_environments: '["${{ github.run_id }}${{ github.run_attempt }}"]'
+      TF_VAR_appId: "136d9f6b-012f-468e-b51b-2ed377f706f5"
+      TF_VAR_password: "zBj8Q~sCBdVdissAf4MC6gqy22tvnG3UBjK2SaIi"
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -53,9 +55,14 @@ jobs:
         id: apply
         run: |
           terraform apply -auto-approve
-        continue-on-error: true
+                    
+      - name: 'Terraform output'
+        id: output
+        run: |
+          terraform output -json
                     
       - name: 'Terraform destroy'
+        if: always()
         id: destroy
         run: |
           terraform destroy -auto-approve
