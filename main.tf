@@ -6,12 +6,28 @@ resource "azurerm_resource_group" "resourcegroups" {
     environment = each.key
   }
 }
+resource "azurerm_storage_account" "storage" {
+  for_each                 = toset(var.environments)
+  name                     = "storage_account_${each.key}"
+  resource_group_name      = azurerm_resource_group.resourcegroups[each.key].name
+  location                 = azurerm_resource_group.resourcegroups[each.key].location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
 
+
+  tags = {
+    environment = each.key
+  }
+
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
+}
 resource "azurerm_container_registry" "acrs" {
   for_each            = toset(var.environments)
   name                = "${var.ContainerRegistryName}${title(each.key)}"
-  resource_group_name = "${var.ResourceGroup}_${each.key}"
-  location            = var.Location
+  resource_group_name = azurerm_resource_group.resourcegroups[each.key].name
+  location            = azurerm_resource_group.resourcegroups[each.key].location
   sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
   tags = {
@@ -25,8 +41,8 @@ resource "azurerm_container_registry" "acrs" {
 resource "azurerm_key_vault" "keyvaults" {
   for_each                    = toset(var.environments)
   name                        = "${var.KeyVaultName}${title(each.key)}"
-  location                    = var.Location
-  resource_group_name         = "${var.ResourceGroup}_${each.key}"
+  location                    = azurerm_resource_group.resourcegroups[each.key].location
+  resource_group_name         = azurerm_resource_group.resourcegroups[each.key].name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
@@ -55,8 +71,8 @@ resource "azurerm_key_vault" "keyvaults" {
 resource "azurerm_kubernetes_cluster" "clusters" {
   for_each            = toset(var.environments)
   name                = "fil-rouge-aks-${each.key}"
-  location            = var.Location
-  resource_group_name = "${var.ResourceGroup}_${each.key}"
+  location            = azurerm_resource_group.resourcegroups[each.key].location
+  resource_group_name = azurerm_resource_group.resourcegroups[each.key].name
   dns_prefix          = "fil-rouge-${each.key}-k8s"
 
   default_node_pool {
