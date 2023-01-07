@@ -69,7 +69,6 @@ resource "azurerm_key_vault" "keyvaults" {
   ]
 }
 resource "azurerm_kubernetes_cluster" "clusters" {
-  for_each            = toset(var.environments)
   name                = "fil-rouge-aks-${var.environment}"
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
