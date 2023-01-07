@@ -1,0 +1,81 @@
+# This is a basic workflow to help you get started with Actions
+
+name: deployment_dev
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "develop" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types:
+      - closed
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    name: 'Deployment Dev'
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      TF_VAR_environment: "dev"
+      TF_VAR_resource_group_name: "StorageAccount-ResourceGroup"
+      TF_VAR_storage_account_name: "storage_account_dev"
+      TF_VAR_container_name: "tfstate"
+      TF_VAR_key: "dev.terraform.tfstate"
+
+      TF_VAR_appId: "136d9f6b-012f-468e-b51b-2ed377f706f5"
+      TF_VAR_password: "zBj8Q~sCBdVdissAf4MC6gqy22tvnG3UBjK2SaIi"
+      
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: 'Terraform init'
+        id: init
+        run: |
+          terraform init
+
+      - name: 'Terraform validate'
+        id: validate
+        run: |
+          terraform validate -no-color
+
+      - name: 'Terraform plan'
+        id: plan
+        run: |
+          terraform plan
+                    
+      - name: 'Terraform apply'
+        id: apply
+        run: |
+          terraform apply -auto-approve
+                    
+      - name: 'Terraform output'
+        id: output
+        run: |
+          terraform output -json
+
+      - name: Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          status: ${{ job.status }}
+          notify_when: 'failure'
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
+          SLACK_MESSAGE: 'Deployment dev environments'
+          SLACK_TITLE: 'Deployment Infra Dev'
+          SLACK_USERNAME: 'Github_Action'
+          SLACK_COLOR: ${{ job.status }}
