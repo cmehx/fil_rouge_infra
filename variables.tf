@@ -41,3 +41,12 @@ variable "ClusterName" {
   type    = string
   default = "fil_rouge_cluster"
 }
+
+variable "appId" {
+  type    = string
+  default = "fil_rouge_app"
+}
+variable "password" {
+  type    = string
+  default = "fil_rouge_pwd"
+}
