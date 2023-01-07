@@ -14,6 +14,9 @@ resource "azurerm_container_registry" "acrs" {
   location            = var.Location
   sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
+  tags = {
+    environment = each.key
+  }
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
@@ -42,11 +45,14 @@ resource "azurerm_key_vault" "keyvaults" {
       "Get",
     ]
   }
+  tags = {
+    environment = each.key
+  }
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
 }
-resource "azurerm_kubernetes_cluster" "cluster" {
+resource "azurerm_kubernetes_cluster" "clusters" {
   for_each            = toset(var.environments)
   name                = "fil-rouge-aks-${each.key}"
   location            = var.Location
@@ -75,4 +81,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   tags = {
     environment = each.key
   }
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
 }
