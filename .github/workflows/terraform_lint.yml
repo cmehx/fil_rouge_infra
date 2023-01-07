@@ -1,0 +1,32 @@
+name: terraform-lint
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "develop" branch
+  push:
+    branches: [ "*" ]
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  #linter
+  linter:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Lint Terraform
+      uses: actionshub/terraform-lint@main
+    - name: Slack Notification
+      if: always()
+      uses: rtCamp/action-slack-notify@v2
+      with:
+        status: ${{ job.status }}
+        notify_when: 'failure'
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
+        SLACK_MESSAGE: 'Terraform linter'
+        SLACK_TITLE: 'TerraLint'
+        SLACK_USERNAME: 'Github_Action'
+        SLACK_COLOR: ${{ job.status }}
