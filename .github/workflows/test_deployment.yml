@@ -42,12 +42,6 @@ jobs:
         run: |
           terraform init -reconfigure
 
-      - name: 'Terraform import'
-        id: import
-        run: |
-          ./terraform_import.sh
-        shell: bash
-
       - name: 'Terraform validate'
         id: validate
         run: |
