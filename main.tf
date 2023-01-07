@@ -7,6 +7,13 @@ terraform {
   }
 
   required_version = ">= 0.14.9"
+
+  backend "azurerm" {
+    resource_group_name  = "${var.ResourceGroup}_${var.environment}"
+    storage_account_name = "tfstatefilrouge${var.environment}"
+    container_name       = "terraformfilrouge"
+    key                  = "terraformfilrouge.tfstate"
+  }
 }
 
 provider "azurerm" {
@@ -25,6 +32,23 @@ resource "azurerm_resource_group" "resourcegroups" {
   tags = {
     environment = var.environment
   }
+}
+
+resource "azurerm_storage_account" "storage" {
+  name                     = "tfstatefilrouge${var.environment}"
+  resource_group_name      = azurerm_resource_group.resourcegroups.name
+  location                 = azurerm_resource_group.resourcegroups.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+
+  tags = {
+    environment = var.environment
+  }
+}
+resource "azurerm_storage_container" "container" {
+  name                  = "terraformfilrouge"
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "private"
 }
 resource "azurerm_container_registry" "acrs" {
   name                = "${var.ContainerRegistryName}${title(var.environment)}"
