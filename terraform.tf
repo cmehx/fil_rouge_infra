@@ -7,6 +7,14 @@ terraform {
   }
 
   required_version = ">= 0.14.9"
+
+  backend "azurerm" {
+    for_each             = var.environments
+    resource_group_name  = "StorageAccount-ResourceGroup"
+    storage_account_name = "storage_account_${each.key}"
+    container_name       = "tfstate"
+    key                  = "${each.key}.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
@@ -19,12 +27,5 @@ provider "azurerm" {
 }
 
 
-backend "azurerm" {
-  for_each             = var.environments
-  resource_group_name  = "StorageAccount-ResourceGroup"
-  storage_account_name = "storage_account_${each.key}"
-  container_name       = "tfstate"
-  key                  = "${each.key}.terraform.tfstate"
-}
 
 data "azurerm_client_config" "current" {}
