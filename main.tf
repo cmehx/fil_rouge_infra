@@ -54,13 +54,13 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   dns_prefix          = "fil-rouge-${each.key}-k8s"
 
   default_node_pool {
-    name            = "default"
-    vm_size         = "Standard_D2_v2"
-    type            = "VirtualMachineScaleSets"
-    os_disk_size_gb = 30
+    name                = "default"
+    vm_size             = "Standard_D2_v2"
+    type                = "VirtualMachineScaleSets"
+    os_disk_size_gb     = 30
     enable_auto_scaling = true
-    min_count       = 1
-    max_count       = 2
+    min_count           = 1
+    max_count           = 2
   }
 
   service_principal {
