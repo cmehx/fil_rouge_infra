@@ -39,7 +39,7 @@ jobs:
       - name: 'Terraform import'
         id: import
         run: |
-          ./terraform.sh
+          ./terraform_import.sh
         shell: bash
 
       # Runs a single command using the runners shell
