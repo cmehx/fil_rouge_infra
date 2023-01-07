@@ -55,6 +55,12 @@ jobs:
           terraform apply -auto-approve
         continue-on-error: true
                     
+      - name: 'Terraform output'
+        id: output
+        run: |
+          terraform output -json
+        continue-on-error: true
+                    
       - name: 'Terraform destroy'
         id: destroy
         run: |
