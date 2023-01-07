@@ -2,9 +2,12 @@ resource "azurerm_resource_group" "resourcegroups" {
   for_each = toset(var.environments)
   name     = "${var.ResourceGroup}_${each.key}"
   location = var.Location
+  tags = {
+    environment = each.key
+  }
 }
 
-resource "azurerm_container_registry" "acr" {
+resource "azurerm_container_registry" "acrs" {
   for_each            = toset(var.environments)
   name                = "${var.ContainerRegistryName}${title(each.key)}"
   resource_group_name = "${var.ResourceGroup}_${each.key}"
@@ -16,7 +19,7 @@ resource "azurerm_container_registry" "acr" {
   ]
 }
 
-resource "azurerm_key_vault" "keyvault" {
+resource "azurerm_key_vault" "keyvaults" {
   for_each                    = toset(var.environments)
   name                        = "${var.KeyVaultName}${title(each.key)}"
   location                    = var.Location
@@ -43,27 +46,48 @@ resource "azurerm_key_vault" "keyvault" {
     azurerm_resource_group.resourcegroups
   ]
 }
-
 resource "azurerm_kubernetes_cluster" "cluster" {
   for_each            = toset(var.environments)
-  name                = "${var.ClusterName}_${each.key}"
+  name                = "fil-rouge-aks-${each.key}"
   location            = var.Location
   resource_group_name = "${var.ResourceGroup}_${each.key}"
+  dns_prefix          = "fil-rouge-${each.key}-k8s"
 
   default_node_pool {
-    name       = "default"
-    node_count = 2
-    vm_size    = "Standard_D2_v2"
+    name            = "default"
+    vm_size         = "Standard_D2_v2"
+    type            = "VirtualMachineScaleSets"
+    os_disk_size_gb = 30
+    enable_auto_scaling = true
+    min_count       = 1
+    max_count       = 2
   }
 
-  identity {
-    type = "SystemAssigned"
+  service_principal {
+    client_id     = var.appId
+    client_secret = var.password
+  }
+
+  role_based_access_control {
+    enabled = true
   }
 
   tags = {
-    Environment = each.key
+    environment = each.key
   }
-  depends_on = [
-    azurerm_resource_group.resourcegroups
-  ]
+}
+output "resource_group_names" {
+  value = azurerm_resource_group.resourcegroups.name
+}
+
+output "kubernetes_cluster_names" {
+  value = azurerm_container_registry.acrs.name
+}
+
+output "azurerm_key_vault_names" {
+  value = azurerm_key_vault.keyvaults.name
+}
+
+output "kubernetes_cluster_names" {
+  value = azurerm_kubernetes_cluster.clusters.name
 }
