@@ -74,13 +74,10 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     client_secret = var.password
   }
 
-  role_based_access_control {
-    enabled = true
-  }
-
   tags = {
     environment = each.key
   }
+
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
