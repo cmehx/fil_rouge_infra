@@ -59,6 +59,14 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
+  node_resource_group = "${azurerm_resource_group.resourcegroups.name}-aks"
+  addon_profile {
+    azure_policy { enabled = true }
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+    }
+  }
 
   default_node_pool {
     name                = "default"
@@ -68,20 +76,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     max_count           = 1
   }
 
-  identity {
-    type = "SystemAssigned"
-  }
-
-  addon_profile {
-    azure_policy {
-      enabled = true
-    }
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
-    }
-  }
-
+  identity { type = "SystemAssigned" }
   tags = {
     environment = var.environment
   }
