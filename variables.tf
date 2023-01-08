@@ -21,7 +21,7 @@ variable "ContainerRegistryName" {
 
 variable "ContainerRegistrySKU" {
   type    = string
-  default = "Premium"
+  default = "Standard"
 }
 
 variable "KeyVaultName" {
