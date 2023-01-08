@@ -1,7 +1,7 @@
 variable "environment" {
   description = "Env to deploy"
   type        = string
-  default     = "dev"
+  default = "dev"
 }
 
 variable "Location" {
@@ -21,7 +21,7 @@ variable "ContainerRegistryName" {
 
 variable "ContainerRegistrySKU" {
   type    = string
-  default = "Standard"
+  default = "Premium"
 }
 
 variable "KeyVaultName" {
