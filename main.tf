@@ -59,6 +59,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
+
   addon_profile {
     azure_policy { enabled = true }
     oms_agent {
@@ -67,6 +68,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     }
   }
 
+  identity { type = "SystemAssigned" }
   default_node_pool {
     name                = "default"
     vm_size             = "Standard_D2_v2"
@@ -75,7 +77,11 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     max_count           = 1
   }
 
-  identity { type = "SystemAssigned" }
+  service_principal {
+    client_id     = var.appId
+    client_secret = var.password
+  }
+
   tags = {
     environment = var.environment
   }
