@@ -6,7 +6,7 @@ name: test_deployment
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
-    branches: [ "main" ]
+    branches: [ "develop", "main" ]
   pull_request:
     types:
       - opened
@@ -45,7 +45,7 @@ jobs:
       - name: 'Terraform init'
         id: init
         run: |
-          terraform init -backend-config="key='tftstate_${{ env.TF_VAR_environment }}'"
+          terraform init -backend-config="key=tftstate_${{ env.TF_VAR_environment }}"
 
       - name: 'Terraform validate'
         id: validate
@@ -72,6 +72,12 @@ jobs:
         id: destroy
         run: |
           terraform destroy -auto-approve
+      
+      - name: 'Destroy tftstate'
+        if: always()
+        id: remove_tftstate
+        run: |
+          az storage blob delete --account-name filrougetfstate --container-name terraform --name tftstate_${{ env.TF_VAR_environment }}
 
       - name: Slack Notification
         if: always()
