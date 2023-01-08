@@ -47,6 +47,13 @@ resource "azurerm_key_vault" "keyvaults" {
     azurerm_resource_group.resourcegroups
   ]
 }
+resource "azurerm_log_analytics_workspace" "insights" {
+  name                = "fil-rouge-logs-${var.environment}"
+  location            = azurerm_resource_group.resourcegroups.location
+  resource_group_name = azurerm_resource_group.resourcegroups.name
+  retention_in_days   = 30
+}
+
 resource "azurerm_kubernetes_cluster" "clusters" {
   name                = "fil-rouge-aks-${var.environment}"
   location            = azurerm_resource_group.resourcegroups.location
@@ -56,15 +63,23 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   default_node_pool {
     name                = "default"
     vm_size             = "Standard_D2_v2"
-    os_disk_size_gb     = 30
     enable_auto_scaling = true
     min_count           = 1
     max_count           = 1
   }
 
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
+  identity {
+    type = "SystemAssigned"
+  }
+
+  addon_profile {
+    azure_policy {
+      enabled = true
+    }
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+    }
   }
 
   tags = {
