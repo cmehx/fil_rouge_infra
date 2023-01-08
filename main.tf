@@ -59,7 +59,6 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
-  node_resource_group = "${azurerm_resource_group.resourcegroups.name}-aks"
   addon_profile {
     azure_policy { enabled = true }
     oms_agent {
