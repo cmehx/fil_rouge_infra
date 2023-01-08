@@ -1,7 +1,7 @@
 variable "environment" {
   description = "Env to deploy"
   type        = string
-  default = "dev"
+  default     = "dev"
 }
 
 variable "Location" {
