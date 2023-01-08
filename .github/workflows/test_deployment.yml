@@ -44,31 +44,31 @@ jobs:
         run: |
           terraform init -backend-config="key=tftstate_${{ env.TF_VAR_environment }}"
 
-      # - name: 'Terraform validate'
-      #   id: validate
-      #   run: |
-      #     terraform validate -no-color
+      - name: 'Terraform validate'
+        id: validate
+        run: |
+          terraform validate -no-color
 
-      # - name: 'Terraform plan'
-      #   id: plan
-      #   run: |
-      #     terraform plan
+      - name: 'Terraform plan'
+        id: plan
+        run: |
+          terraform plan
                     
-      # - name: 'Terraform apply'
-      #   id: apply
-      #   run: |
-      #     terraform apply -auto-approve
+      - name: 'Terraform apply'
+        id: apply
+        run: |
+          terraform apply -auto-approve
                     
-      # - name: 'Terraform output'
-      #   id: output
-      #   run: |
-      #     terraform output -json
+      - name: 'Terraform output'
+        id: output
+        run: |
+          terraform output -json
                     
-      # - name: 'Terraform destroy'
-      #   if: always()
-      #   id: destroy
-      #   run: |
-      #     terraform destroy -auto-approve
+      - name: 'Terraform destroy'
+        if: always()
+        id: destroy
+        run: |
+          terraform destroy -auto-approve
       
       - name: 'AZ Login'
         id: login
