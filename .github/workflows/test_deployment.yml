@@ -5,8 +5,6 @@ name: test_deployment
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
-  push:
-    branches: [ "develop", "main" ]
   pull_request:
     types:
       - opened
@@ -47,37 +45,41 @@ jobs:
         run: |
           terraform init -backend-config="key=tftstate_${{ env.TF_VAR_environment }}"
 
-      - name: 'Terraform validate'
-        id: validate
-        run: |
-          terraform validate -no-color
+      # - name: 'Terraform validate'
+      #   id: validate
+      #   run: |
+      #     terraform validate -no-color
 
-      - name: 'Terraform plan'
-        id: plan
-        run: |
-          terraform plan
+      # - name: 'Terraform plan'
+      #   id: plan
+      #   run: |
+      #     terraform plan
                     
-      - name: 'Terraform apply'
-        id: apply
-        run: |
-          terraform apply -auto-approve
+      # - name: 'Terraform apply'
+      #   id: apply
+      #   run: |
+      #     terraform apply -auto-approve
                     
-      - name: 'Terraform output'
-        id: output
-        run: |
-          terraform output -json
+      # - name: 'Terraform output'
+      #   id: output
+      #   run: |
+      #     terraform output -json
                     
-      - name: 'Terraform destroy'
-        if: always()
-        id: destroy
-        run: |
-          terraform destroy -auto-approve
+      # - name: 'Terraform destroy'
+      #   if: always()
+      #   id: destroy
+      #   run: |
+      #     terraform destroy -auto-approve
       
       - name: 'Destroy tftstate'
         if: always()
         id: remove_tftstate
         run: |
-          az storage blob delete --account-name filrougetfstate --container-name terraform --name tftstate_${{ env.TF_VAR_environment }}
+          az storage blob delete \
+            --account-name filrougetfstate \
+            --container-name terraform \
+            --name tftstate_${{ env.TF_VAR_environment }} \
+            --auth-mode login
 
       - name: Slack Notification
         if: always()
