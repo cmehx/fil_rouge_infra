@@ -52,9 +52,10 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
+  monitor_metrics     = "prometheus"
 
   default_node_pool {
-    name                = "filrouge${var.environment}"
+    name                = "default"
     vm_size             = "Standard_D2_v2"
     os_disk_size_gb     = 30
     enable_auto_scaling = true
