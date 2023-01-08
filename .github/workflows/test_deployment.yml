@@ -77,8 +77,7 @@ jobs:
           az storage blob delete \
             --account-name filrougetfstate \
             --container-name terraform \
-            --name tftstate_${{ env.TF_VAR_environment }} \
-            --sdk-auth
+            --name tftstate_${{ env.TF_VAR_environment }}
 
       - name: Slack Notification
         if: always()
