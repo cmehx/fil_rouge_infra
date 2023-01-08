@@ -1,32 +1,27 @@
 resource "azurerm_resource_group" "resourcegroups" {
-  for_each = toset(var.environments)
-  name     = "${var.ResourceGroup}_${each.key}"
+  name     = "${var.ResourceGroup}_${var.environment}"
   location = var.Location
   tags = {
-    environment = each.key
+    environment = var.environment
   }
 }
-
 resource "azurerm_container_registry" "acrs" {
-  for_each            = toset(var.environments)
-  name                = "${var.ContainerRegistryName}${title(each.key)}"
-  resource_group_name = "${var.ResourceGroup}_${each.key}"
-  location            = var.Location
+  name                = "${var.ContainerRegistryName}${title(var.environment)}"
+  resource_group_name = azurerm_resource_group.resourcegroups.name
+  location            = azurerm_resource_group.resourcegroups.location
   sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
   tags = {
-    environment = each.key
+    environment = var.environment
   }
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
 }
-
 resource "azurerm_key_vault" "keyvaults" {
-  for_each                    = toset(var.environments)
-  name                        = "${var.KeyVaultName}${title(each.key)}"
-  location                    = var.Location
-  resource_group_name         = "${var.ResourceGroup}_${each.key}"
+  name                        = "${var.KeyVaultName}${title(var.environment)}"
+  location                    = azurerm_resource_group.resourcegroups.location
+  resource_group_name         = azurerm_resource_group.resourcegroups.name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
@@ -46,23 +41,21 @@ resource "azurerm_key_vault" "keyvaults" {
     ]
   }
   tags = {
-    environment = each.key
+    environment = var.environment
   }
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
 }
 resource "azurerm_kubernetes_cluster" "clusters" {
-  for_each            = toset(var.environments)
-  name                = "fil-rouge-aks-${each.key}"
-  location            = var.Location
-  resource_group_name = "${var.ResourceGroup}_${each.key}"
-  dns_prefix          = "fil-rouge-${each.key}-k8s"
+  name                = "fil-rouge-aks-${var.environment}"
+  location            = azurerm_resource_group.resourcegroups.location
+  resource_group_name = azurerm_resource_group.resourcegroups.name
+  dns_prefix          = "fil-rouge-${var.environment}-k8s"
 
   default_node_pool {
     name                = "default"
     vm_size             = "Standard_D2_v2"
-    type                = "VirtualMachineScaleSets"
     os_disk_size_gb     = 30
     enable_auto_scaling = true
     min_count           = 1
@@ -75,7 +68,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   }
 
   tags = {
-    environment = each.key
+    environment = var.environment
   }
 
   depends_on = [

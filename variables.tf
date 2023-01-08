@@ -1,10 +1,7 @@
-variable "environments" {
+variable "environment" {
   description = "Env to deploy"
-  type        = list(string)
-  default = [
-    "dev",
-    "uat"
-  ]
+  type        = string
+  default     = "dev"
 }
 
 variable "Location" {

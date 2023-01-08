@@ -1,13 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: test_deployment
+name: deployment_dev
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   pull_request:
+    branches: [ "main" ]
     types:
-      - opened
+      - closed
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -18,13 +19,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
-    name: 'Test deployment'
+    name: 'Deployment Dev'
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      TF_VAR_environment: "${{ github.run_id }}${{ github.run_attempt }}"
+      TF_VAR_environment: "dev"
       TF_VAR_appId: ${{ secrets.AZURE_APP_ID }}
       TF_VAR_password: ${{ secrets.AZURE_APP_PWD }}
       
@@ -63,28 +64,6 @@ jobs:
         id: output
         run: |
           terraform output -json
-                    
-      - name: 'Terraform destroy'
-        if: always()
-        id: destroy
-        run: |
-          terraform destroy -auto-approve
-      
-      - name: 'AZ Login'
-        id: login
-        if: always()
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: "Delete tftstate"
-        id: delete_tftstate
-        run: |
-          az storage blob delete \
-            --account-name filrougetfstate \
-            --container-name terraform \
-            --name tftstate_${{ env.TF_VAR_environment }}
-          az logout
 
       - name: Slack Notification
         if: always()
@@ -94,7 +73,7 @@ jobs:
           notify_when: 'failure'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
-          SLACK_MESSAGE: 'Test deployment'
-          SLACK_TITLE: 'Test Deployment'
+          SLACK_MESSAGE: 'Deployment dev environments'
+          SLACK_TITLE: 'Deployment Infra Dev'
           SLACK_USERNAME: 'Github_Action'
           SLACK_COLOR: ${{ job.status }}
