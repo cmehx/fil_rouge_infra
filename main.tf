@@ -47,26 +47,12 @@ resource "azurerm_key_vault" "keyvaults" {
     azurerm_resource_group.resourcegroups
   ]
 }
-resource "azurerm_log_analytics_workspace" "insights" {
-  name                = "fil-rouge-logs-${var.environment}"
-  location            = azurerm_resource_group.resourcegroups.location
-  resource_group_name = azurerm_resource_group.resourcegroups.name
-  retention_in_days   = 30
-}
 
 resource "azurerm_kubernetes_cluster" "clusters" {
   name                = "fil-rouge-aks-${var.environment}"
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
-
-  addon_profile {
-    azure_policy { enabled = true }
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
-    }
-  }
 
   identity { type = "SystemAssigned" }
   default_node_pool {
