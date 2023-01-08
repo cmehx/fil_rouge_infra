@@ -70,15 +70,20 @@ jobs:
       #   run: |
       #     terraform destroy -auto-approve
       
-      - name: 'Destroy tftstate'
+      - name: 'AZ Login'
+        id: login
         if: always()
-        id: remove_tftstate
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Delete tftstate"
+        id: delete_tftstate
         run: |
-          az login -u ${{ env.TF_VAR_appId }} -p ${{ env.TF_VAR_password }} --tenant <tenant> ${{ env.ARM_TENANT_ID }}
           az storage blob delete \
             --account-name filrougetfstate \
             --container-name terraform \
-            --name tftstate_${{ env.TF_VAR_environment }} \
+            --name tftstate_${{ env.TF_VAR_environment }}
           az logout
 
       - name: Slack Notification
