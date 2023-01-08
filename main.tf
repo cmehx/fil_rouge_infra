@@ -63,11 +63,6 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     max_count           = 1
   }
 
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
-  }
-
   tags = {
     environment = var.environment
   }
