@@ -45,7 +45,7 @@ jobs:
       - name: 'Terraform init'
         id: init
         run: |
-          terraform init -backend-config="key='tftstate_${ env.TF_VAR_environment }'"
+          terraform init -backend-config="key='tftstate_${{ env.TF_VAR_environment }}'"
 
       - name: 'Terraform validate'
         id: validate
