@@ -8,7 +8,11 @@ terraform {
 
   required_version = ">= 0.14.9"
 
-  backend "azurerm" {}
+  backend "azurerm" {
+    resource_group_name  = "fil_rouge_grp_devops"
+    storage_account_name = "filrougetfstate"
+    container_name       = "terraform"
+  }
 }
 
 provider "azurerm" {

@@ -5,23 +5,6 @@ resource "azurerm_resource_group" "resourcegroups" {
     environment = var.environment
   }
 }
-
-resource "azurerm_storage_account" "storage" {
-  name                     = "tfstatefilrouge${var.environment}"
-  resource_group_name      = azurerm_resource_group.resourcegroups.name
-  location                 = azurerm_resource_group.resourcegroups.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-
-  tags = {
-    environment = var.environment
-  }
-}
-resource "azurerm_storage_container" "container" {
-  name                  = "terraformfilrouge"
-  storage_account_name  = azurerm_storage_account.storage.name
-  container_access_type = "private"
-}
 resource "azurerm_container_registry" "acrs" {
   name                = "${var.ContainerRegistryName}${title(var.environment)}"
   resource_group_name = azurerm_resource_group.resourcegroups.name
