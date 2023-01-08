@@ -74,10 +74,12 @@ jobs:
         if: always()
         id: remove_tftstate
         run: |
+          az login -u ${{ env.TF_VAR_appId }} -p ${{ env.TF_VAR_password }}
           az storage blob delete \
             --account-name filrougetfstate \
             --container-name terraform \
-            --name tftstate_${{ env.TF_VAR_environment }}
+            --name tftstate_${{ env.TF_VAR_environment }} \
+          az logout
 
       - name: Slack Notification
         if: always()
