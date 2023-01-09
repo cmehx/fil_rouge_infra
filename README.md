@@ -1,50 +1,43 @@
-# fil_rouge_infra
+GitHub action for successful authentication between your repository and Azure
 
-GitHub action to successfully authentication between your repository and Azure
+Create an  Azure backend service
+Set up GitHub secrets
 
-Create Azure service principal
-Configure GitHub secrets
-
-Terraform state file setup
-Terraform must store state about your managed infrastructure and configuration. This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.
+Configuring the Terraform Status File
+Terraform must store the state of your managed infrastructure and configuration. This state is used by Terraform to map real-world resources to your configuration, track metadata, and improve the performance of large infrastructures.
 
 
-Configure what is required to store terraform state file remotely within an Azure storage account
+Configure what is required to store the terraform report file remotely in an Azure storage account
 
 Deploy Terraform Base
-This lab is the first part of deploying terraform, known as base; it will deploy:
 
 Resource Group
 Azure Container Registry (ACR)
-Log Analytics
-Application Insights
+Log analysis
+Application Information
 
-Build and deploy application to ACR
-Time to Build and deploy the application to Azure Container Registry (ACR).
+Create and deploy an application to ACR
+It's time to build and deploy the application to Azure Container Registry (ACR).
 
 
-Update Secrets for github
-Configured Application Insights to application
-Update workflow in GitHub action to build and deploy application
+Update secrets for github
+Configuring Application Insights on the application
+Update the workflow in the GitHub action to create and deploy an app
 
-Deploy Container App using Terraform
-Now that the test application has been built and deployed into ACR, time to deploying the container app with image built on previous stage 4-build-deploy-application-to-acr
+Deploy a container application using Terraform
+Now that the test application has been built and deployed in ACR, it is time to deploy the container application with the built image - build-deploy-application-to-acr
 
 deploy using Terraform:
 
-Azure Container Environment
+Azure container environment
 Azure Managed Identity
-Azure IAM to allow the Managed Identity acrpull permissions from the ACR previously created
-Azure Container App with Managed Identity and deploy application into Container App
+Azure IAM to allow acrpull Managed Identity permissions from the previously created ACR
+Azure container application with managed identity and deployment of the application in the AKS container application.
 
 Monitoring and alerting
-The purpose of this lab is to review and setup sample monitoring and alerting.
-
-
-Use and review Application Insights logs and metrics
-Setup an Application Insights Availability test
-Use and review Log Analytics along with container insights
-
+Notifications a channel of slack
+Monitoring and log 
+Use and review Log Analytics with container insights
 Deployment Overview
-Once we commit a change to the source code – we want the Container Application to have been deployed with the latest commit automatically.
+Once we've validated a source code change, we want the container app to have been deployed automatically with the last commit.
 
