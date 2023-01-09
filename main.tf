@@ -130,14 +130,10 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     azurerm_log_analytics_workspace.law
   ]
 }
-data "azuread_service_principal" "aks_principal" {
-  application_id = var.appId
-}
-
 resource "azurerm_role_assignment" "kube_to_acr" {
   scope                            = azurerm_container_registry.acrs.id
   role_definition_name             = "AcrPull"
-  principal_id                     = data.azuread_service_principal.aks_principal.id
+  principal_id                     = var.appId
   skip_service_principal_aad_check = true
 
   depends_on = [
