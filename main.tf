@@ -69,7 +69,7 @@ resource "azurerm_log_analytics_storage_insights" "lasi" {
   storage_account_key = azurerm_storage_account.storage.primary_access_key
 }
 
-resource "azurerm_log_analytics_solution" "example" {
+resource "azurerm_log_analytics_solution" "las" {
   solution_name         = "Containers"
   workspace_resource_id = azurerm_log_analytics_workspace.law.id
   workspace_name        = azurerm_log_analytics_workspace.law.name
