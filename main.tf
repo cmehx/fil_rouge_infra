@@ -129,9 +129,10 @@ resource "azurerm_kubernetes_cluster" "clusters" {
 }
 
 resource "azurerm_role_assignment" "kube_to_acr" {
-  scope                = azurerm_container_registry.acrs.id
-  role_definition_name = "AcrPull"
-  principal_id         = data.azurerm_client_config.current.object_id
+  principal_id                     = azurerm_kubernetes_cluster.clusters.kubelet_identity[0].object_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.acrs.id
+  skip_service_principal_aad_check = true
 
   depends_on = [
     azurerm_container_registry.acrs,
