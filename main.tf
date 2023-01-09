@@ -123,6 +123,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   }
 
   depends_on = [
-    azurerm_resource_group.resourcegroups
+    azurerm_resource_group.resourcegroups,
+    azurerm_log_analytics_workspace.law
   ]
 }
