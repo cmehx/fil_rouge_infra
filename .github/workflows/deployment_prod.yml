@@ -73,7 +73,7 @@ jobs:
           notify_when: 'failure'
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_DEV_INFRA }}
-          SLACK_MESSAGE: 'Deployment dev and uat environments'
-          SLACK_TITLE: 'Deployment Infra Dev UAT'
+          SLACK_MESSAGE: 'Deployment prod environment'
+          SLACK_TITLE: 'Deployment Infra Prod'
           SLACK_USERNAME: 'Github_Action'
           SLACK_COLOR: ${{ job.status }}
