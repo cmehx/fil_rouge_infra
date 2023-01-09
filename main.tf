@@ -93,7 +93,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     vm_size             = "Standard_D2_v2"
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 1
+    max_count           = 2
   }
 
   oms_agent {
