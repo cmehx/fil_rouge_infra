@@ -132,9 +132,6 @@ resource "azurerm_role_assignment" "kube_to_acr" {
   scope                = azurerm_container_registry.acrs.id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_kubernetes_cluster.clusters.kubelet_identity[0].object_id
-  tags = {
-    environment = var.environment
-  }
 
   depends_on = [
     azurerm_container_registry.acrs,
