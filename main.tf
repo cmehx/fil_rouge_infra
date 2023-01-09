@@ -52,6 +52,10 @@ resource "azurerm_log_analytics_workspace" "law" {
   resource_group_name = azurerm_resource_group.resourcegroups.name
   location            = azurerm_resource_group.resourcegroups.location
   sku                 = "PerGB2018"
+
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
 }
 resource "azurerm_storage_account" "storage" {
   name                     = "filrouge${var.environment}"
@@ -59,6 +63,10 @@ resource "azurerm_storage_account" "storage" {
   location                 = azurerm_resource_group.resourcegroups.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+  depends_on = [
+    azurerm_resource_group.resourcegroups
+  ]
 }
 resource "azurerm_log_analytics_storage_insights" "lasi" {
   name                = "fil-rouge-${var.environment}-lasi"
@@ -67,6 +75,12 @@ resource "azurerm_log_analytics_storage_insights" "lasi" {
 
   storage_account_id  = azurerm_storage_account.storage.id
   storage_account_key = azurerm_storage_account.storage.primary_access_key
+
+  depends_on = [
+    azurerm_resource_group.resourcegroups,
+    azurerm_log_analytics_workspace.law,
+    azurerm_storage_account.storage
+  ]
 }
 
 resource "azurerm_log_analytics_solution" "las" {
@@ -80,6 +94,11 @@ resource "azurerm_log_analytics_solution" "las" {
     publisher = "Microsoft"
     product   = "OMSGallery/Containers"
   }
+
+  depends_on = [
+    azurerm_resource_group.resourcegroups,
+    azurerm_log_analytics_workspace.law
+  ]
 }
 resource "azurerm_kubernetes_cluster" "clusters" {
   name                = "fil-rouge-aks-${var.environment}"
