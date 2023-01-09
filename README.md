@@ -1,5 +1,5 @@
 
-![alt text](https://azure.github.io/kube-labs/assets/img/overview.6b6d9d08.png)
+![alt text](https://user-images.githubusercontent.com/1248896/189254453-439dd558-fc6c-4377-b01c-d5e54cc49403.png)
 
 
 
