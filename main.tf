@@ -53,6 +53,21 @@ resource "azurerm_log_analytics_workspace" "law" {
   location            = azurerm_resource_group.resourcegroups.location
   sku                 = "PerGB2018"
 }
+resource "azurerm_storage_account" "storage" {
+  name                     = "filrouge${var.environment}"
+  resource_group_name      = azurerm_resource_group.resourcegroups.name
+  location                 = azurerm_resource_group.resourcegroups.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+resource "azurerm_log_analytics_storage_insights" "lasi" {
+  name                = "fil-rouge-${var.environment}-lasi"
+  resource_group_name = azurerm_resource_group.resourcegroups.name
+  workspace_id        = azurerm_log_analytics_workspace.law.id
+
+  storage_account_id  = azurerm_storage_account.storage.id
+  storage_account_key = azurerm_storage_account.storage.primary_access_key
+}
 
 resource "azurerm_log_analytics_solution" "example" {
   solution_name         = "Containers"
