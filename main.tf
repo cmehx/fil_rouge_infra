@@ -106,7 +106,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
   service_principal {
-    client_id     = var.app_id
+    client_id     = var.appId
     client_secret = var.password
   }
   default_node_pool {
@@ -131,7 +131,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
 }
 
 data "azurerm_azuread_service_principal" "serviceprincipal" {
-    application_id = var.app_id
+    application_id = var.appId
 }
 resource "azurerm_role_assignment" "kube_to_acr" {
   role_definition_name             = "AcrPull"
