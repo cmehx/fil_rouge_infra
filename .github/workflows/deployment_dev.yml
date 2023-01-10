@@ -53,7 +53,7 @@ jobs:
       - name: 'Terraform plan'
         id: plan
         run: |
-          terraform plan
+          terraform plan -lock=false
                     
       - name: 'Terraform apply'
         id: apply
