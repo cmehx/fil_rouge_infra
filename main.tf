@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "resourcegroups" {
   name     = "${var.ResourceGroup}_${var.environment}"
   location = var.Location
   tags = {
-    environment = var.environment
+    environment = "${var.environment}"
   }
 }
 resource "azurerm_container_registry" "acrs" {
@@ -12,7 +12,7 @@ resource "azurerm_container_registry" "acrs" {
   sku                 = var.ContainerRegistrySKU
   admin_enabled       = false
   tags = {
-    environment = var.environment
+    environment = "${var.environment}"
   }
   depends_on = [
     azurerm_resource_group.resourcegroups
@@ -41,7 +41,7 @@ resource "azurerm_key_vault" "keyvaults" {
     ]
   }
   tags = {
-    environment = var.environment
+    environment = "${var.environment}"
   }
   depends_on = [
     azurerm_resource_group.resourcegroups
@@ -63,7 +63,9 @@ resource "azurerm_storage_account" "storage" {
   location                 = azurerm_resource_group.resourcegroups.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
-
+  tags = {
+    environment = "${var.environment}"
+  }
   depends_on = [
     azurerm_resource_group.resourcegroups
   ]
@@ -75,7 +77,9 @@ resource "azurerm_log_analytics_storage_insights" "lasi" {
 
   storage_account_id  = azurerm_storage_account.storage.id
   storage_account_key = azurerm_storage_account.storage.primary_access_key
-
+  tags = {
+    environment = "${var.environment}"
+  }
   depends_on = [
     azurerm_resource_group.resourcegroups,
     azurerm_log_analytics_workspace.law,
@@ -94,7 +98,9 @@ resource "azurerm_log_analytics_solution" "las" {
     publisher = "Microsoft"
     product   = "OMSGallery/Containers"
   }
-
+  tags = {
+    environment = "${var.environment}"
+  }
   depends_on = [
     azurerm_resource_group.resourcegroups,
     azurerm_log_analytics_workspace.law
@@ -105,9 +111,8 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
+  identity {
+    type = "SystemAssigned"
   }
   default_node_pool {
     name                = "default"
@@ -121,7 +126,7 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
   }
   tags = {
-    environment = var.environment
+    environment = "${var.environment}"
   }
 
   depends_on = [
@@ -129,12 +134,14 @@ resource "azurerm_kubernetes_cluster" "clusters" {
     azurerm_log_analytics_workspace.law
   ]
 }
-
-resource "azurerm_role_assignment" "kube_to_acr" {
-  principal_id         = azurerm_kubernetes_cluster.clusters.service_principal.0.client_id
-  role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.acrs.id
-
+resource "azurerm_role_assignment" "role_acrpull" {
+  scope                            = azurerm_container_registry.acrs.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = azurerm_kubernetes_cluster.clusters.kubelet_identity.0.object_id
+  skip_service_principal_aad_check = true
+  tags = {
+    environment = "${var.environment}"
+  }
   depends_on = [
     azurerm_container_registry.acrs,
     azurerm_kubernetes_cluster.clusters
