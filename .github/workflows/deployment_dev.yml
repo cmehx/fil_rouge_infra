@@ -64,12 +64,6 @@ jobs:
         id: output
         run: |
           terraform output -json
-                    
-      - name: 'Terraform destroy'
-        if: always()
-        id: destroy
-        run: |
-          terraform destroy -auto-approve
 
       - name: Slack Notification
         if: always()
