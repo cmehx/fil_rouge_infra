@@ -5,6 +5,13 @@ resource "azurerm_resource_group" "resourcegroups" {
     environment = "${var.environment}"
   }
 }
+resource "azurerm_role_assignment" "role_acrpull" {
+  scope                            = azurerm_container_registry.acrs.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = azurerm_kubernetes_cluster.clusters.kubelet_identity.0.object_id
+  skip_service_principal_aad_check = true
+}
+
 resource "azurerm_container_registry" "acrs" {
   name                = "${var.ContainerRegistryName}${title(var.environment)}"
   resource_group_name = azurerm_resource_group.resourcegroups.name
@@ -130,16 +137,5 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   depends_on = [
     azurerm_resource_group.resourcegroups,
     azurerm_log_analytics_workspace.law
-  ]
-}
-resource "azurerm_role_assignment" "role_acrpull" {
-  scope                            = azurerm_container_registry.acrs.id
-  role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_kubernetes_cluster.clusters.kubelet_identity.0.object_id
-  skip_service_principal_aad_check = true
-
-  depends_on = [
-    azurerm_container_registry.acrs,
-    azurerm_kubernetes_cluster.clusters
   ]
 }
