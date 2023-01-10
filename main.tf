@@ -77,9 +77,7 @@ resource "azurerm_log_analytics_storage_insights" "lasi" {
 
   storage_account_id  = azurerm_storage_account.storage.id
   storage_account_key = azurerm_storage_account.storage.primary_access_key
-  tags = {
-    environment = "${var.environment}"
-  }
+
   depends_on = [
     azurerm_resource_group.resourcegroups,
     azurerm_log_analytics_workspace.law,
