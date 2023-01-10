@@ -53,12 +53,12 @@ jobs:
       - name: 'Terraform plan'
         id: plan
         run: |
-          terraform plan -lock=false
+          terraform plan
                     
       - name: 'Terraform apply'
         id: apply
         run: |
-          terraform apply -auto-approve -lock=false
+          terraform apply -auto-approve
                     
       - name: 'Terraform output'
         id: output
