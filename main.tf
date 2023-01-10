@@ -105,10 +105,8 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   location            = azurerm_resource_group.resourcegroups.location
   resource_group_name = azurerm_resource_group.resourcegroups.name
   dns_prefix          = "fil-rouge-${var.environment}-k8s"
-  service_principal {
-    client_id     = var.appId
-    client_secret = var.password
-  }
+
+  identity { type = "SystemAssigned" }
   default_node_pool {
     name                = "default"
     vm_size             = "Standard_D2_v2"
@@ -130,14 +128,11 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   ]
 }
 
-data "azuread_service_principal" "serviceprincipal" {
-  application_id = var.appId
-}
-
 resource "azurerm_role_assignment" "kube_to_acr" {
-  principal_id         = data.azuread_service_principal.serviceprincipal.id
-  role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.acrs.id
+  principal_id                     = azurerm_kubernetes_cluster.clusters.kubelet_identity[0].object_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.acrs.id
+  skip_service_principal_aad_check = true
 
   depends_on = [
     azurerm_container_registry.acrs,
