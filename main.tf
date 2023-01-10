@@ -136,7 +136,7 @@ data "azurerm_azuread_service_principal" "serviceprincipal" {
 resource "azurerm_role_assignment" "kube_to_acr" {
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.acrs.id
-  principal_id                     = azurerm_azuread_service_principal.serviceprincipal.id
+  principal_id                     = data.azurerm_azuread_service_principal.serviceprincipal.id
 
   depends_on = [
     azurerm_container_registry.acrs,
