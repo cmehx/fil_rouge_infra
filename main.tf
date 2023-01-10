@@ -135,7 +135,7 @@ data "azuread_service_principal" "serviceprincipal" {
 }
 
 resource "azurerm_role_assignment" "kube_to_acr" {
-  principal_id         = data.azuread_service_principal.clusters.kubeserviceprincipal.id
+  principal_id         = data.azuread_service_principal.serviceprincipal.id
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.acrs.id
 
