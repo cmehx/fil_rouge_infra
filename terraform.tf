@@ -23,8 +23,5 @@ provider "azurerm" {
     }
   }
 }
-provider "azuread" {
-  version = "=0.10.0"
-}
 
 data "azurerm_client_config" "current" {}
