@@ -130,8 +130,8 @@ resource "azurerm_kubernetes_cluster" "clusters" {
   ]
 }
 
-resource "azurerm_role_assignment" "kube_to_acr" {
-  principal_id         = azurerm_kubernetes_cluster.clusters.identity[0].principal_id
+/* resource "azurerm_role_assignment" "kube_to_acr" {
+  principal_id         = azurerm_kubernetes_cluster.clusters.identity.principal_id
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.acrs.id
 
@@ -140,3 +140,4 @@ resource "azurerm_role_assignment" "kube_to_acr" {
     azurerm_kubernetes_cluster.clusters
   ]
 }
+ */
